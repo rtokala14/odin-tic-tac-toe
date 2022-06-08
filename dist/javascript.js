@@ -41,7 +41,7 @@ const gameBoard =(() => {
             if (gameArray[pos] === gameArray[pos+3] && gameArray[pos+3] === gameArray[pos+6]) state = 1;
         } 
         // Middle row
-        else if (pos >= 3 && pos >= 5) {
+        else if (pos >= 3 && pos <= 5) {
             if (gameArray[pos-3] === gameArray[pos] && gameArray[pos] === gameArray[pos+3]) state = 1;
         }
         // Bottom row
@@ -73,11 +73,13 @@ const gameBoard =(() => {
         return state;
     }
 
-    const checkDiag = () => {
+    const checkDiag = (pos) => {
         let state = 0;
 
         // Left to Right Diagonal
-        if (gameArray[0] === gameArray[4] && gameArray[4] === gameArray[8]) state = 1;
+        if (pos === 0 || pos === 4 || pos === 8) {
+            if (gameArray[0] === gameArray[4] && gameArray[4] === gameArray[8]) state = 1;
+        }
         // Right to Left Diagonal
         else if (gameArray[2] === gameArray[4] && gameArray[4] === gameArray[6]) state = 1;
 
@@ -93,7 +95,7 @@ const gameBoard =(() => {
         let col = checkCol(pos);
         let row = checkRow(pos);
         if (pos == 0 || pos == 2 || pos == 4 || pos == 6 || pos == 8) {
-            diag = checkDiag();
+            diag = checkDiag(pos);
         }
 
         if (col || row || diag) state = 1;
