@@ -1,3 +1,11 @@
+// Factory function for Players
+const Player = (selection) => {
+    const symbol = selection;
+    const getSymbol = () => symbol;
+
+    return {getSymbol}
+};
+
 // Module for gameBoard
 const gameBoard =(() => {
     const gameArray = ["","","","","","","","",""];
@@ -97,29 +105,61 @@ const gameBoard =(() => {
     return {add, clearBoard, gameArray}
 })();
 
+// Module to controls game mechanics
 const gameControl=(() => {
     const boxes = document.querySelectorAll('.box');
+
+    const player1 = Player('X');
+    const player2 = Player('O');
+
+    let activePlayer = player1;
+
+    // Returns who the current active player is
+    const getActivePlayer = () => activePlayer;
+
+    // Switches the current active player
+    const switchActivePlayer = () => {
+        if (activePlayer === player1) activePlayer = player2;
+        else activePlayer = player1;
+    }
+
+    // Displays the result TODO: as of now only if win
+    const displayWinner = (state) => {
+        const result = document.getElementById('result');
+
+        if (state) result.textContent = "Player " + activePlayer.getSymbol() + " has won the game!";
+        else result.textContent = "";
+    }
 
     const addListeners = () => {
         boxes.forEach((box) => {
             box.addEventListener('click', () => {
                 let id = box.id.charAt(4);
-                gameBoard.add("x", id); // TODO switch player
+                let result = gameBoard.add(getActivePlayer().getSymbol(), id); 
+                console.log(result);
+                if (!result) switchActivePlayer();
+                else {
+                    displayWinner(1);
+                }
             });
         });
 
         const reset = document.getElementById('reset-btn');
         reset.addEventListener('click', () => {
             gameBoard.clearBoard();
+            activePlayer = player1;
+            displayWinner(0);
         });
     }
 
+    // Initializes the game
     const initGame = () => {
+        // TODO: Add player choice selection
+        activePlayer =  player1;
         addListeners();
-        // TODO set active player
     }
 
-    return {initGame}
+    return {initGame, getActivePlayer}
 })();
 
 window.onload = () => {
