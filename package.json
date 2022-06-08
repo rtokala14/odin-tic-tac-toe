@@ -1,0 +1,24 @@
+{
+  "name": "odin-tic-tac-toe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build-css": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --minify",
+    "watch": "watch 'npm run build-css' index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rtokala14/odin-tic-tac-toe.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rtokala14/odin-tic-tac-toe/issues"
+  },
+  "homepage": "https://github.com/rtokala14/odin-tic-tac-toe#readme",
+  "dependencies": {
+    "tailwindcss": "^3.0.24"
+  }
+}
