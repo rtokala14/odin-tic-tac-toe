@@ -1,6 +1,6 @@
 // Module for gameBoard
 const gameBoard =(() => {
-    let gameArray = ["","","","","","","","",""];
+    const gameArray = ["","","","","","","","",""];
     
     // Function to add a selection to the gameBoard
     const add = (char, pos) => {
@@ -96,3 +96,32 @@ const gameBoard =(() => {
     // Final return statement of the module
     return {add, clearBoard, gameArray}
 })();
+
+const gameControl=(() => {
+    const boxes = document.querySelectorAll('.box');
+
+    const addListeners = () => {
+        boxes.forEach((box) => {
+            box.addEventListener('click', () => {
+                let id = box.id.charAt(4);
+                gameBoard.add("x", id); // TODO switch player
+            });
+        });
+
+        const reset = document.getElementById('reset-btn');
+        reset.addEventListener('click', () => {
+            gameBoard.clearBoard();
+        });
+    }
+
+    const initGame = () => {
+        addListeners();
+        // TODO set active player
+    }
+
+    return {initGame}
+})();
+
+window.onload = () => {
+    gameControl.initGame();
+}
