@@ -5,7 +5,7 @@ const gameBoard =(() => {
     // Function to add a selection to the gameBoard
     const add = (char, pos) => {
         gameArray[pos] = char;
-        // TODO add displayBoard here
+        displayBoard(pos, char);
         return gameState(pos);
     }
 
@@ -13,7 +13,15 @@ const gameBoard =(() => {
     const clearBoard = () => {
         for (let i = 0; i < 9; i++) {
             gameArray[i] = "";
+            displayBoard(i, "");
         }
+    }
+
+    // Function to update the board display
+    const displayBoard = (pos, char) => {
+        let search = 'box-' + pos;
+        const box = document.getElementById(search);
+        box.textContent = char;
     }
 
     // Function to check if there is win on the columns
