@@ -1,9 +1,12 @@
 // Factory function for Players
-const Player = (selection) => {
+const Player = (selection, name) => {
     const symbol = selection;
+
+    const getName = () => name;
+
     const getSymbol = () => symbol;
 
-    return {getSymbol}
+    return {getSymbol, getName}
 };
 
 // Module for gameBoard
@@ -117,6 +120,8 @@ const gameControl=(() => {
     const player1 = Player('X');
     const player2 = Player('O');
 
+    const result = document.getElementById('result');
+
     let activePlayer = player1;
 
     let movesLeft = 9;
@@ -130,13 +135,13 @@ const gameControl=(() => {
     const switchActivePlayer = () => {
         if (activePlayer === player1) activePlayer = player2;
         else activePlayer = player1;
+        result.textContent = "Player " + activePlayer.getSymbol() + "'s turn";
     }
 
     // Displays the result TODO: as of now only if win
     const displayWinner = (state) => {
-        const result = document.getElementById('result');
 
-        if (state) result.textContent = "Player " + activePlayer.getSymbol() + " has won the game!";
+        if (state) result.textContent = "Player " + activePlayer.getSymbol() + " has won the game! Reset to play again";
         else {
             if (!movesLeft) {
                 result.textContent = "DRAW! Reset to play again";
@@ -184,6 +189,7 @@ const gameControl=(() => {
             activePlayer = player1;
             movesLeft = 9;
             displayWinner(0);
+            result.textContent = "Player " + activePlayer.getSymbol() + "'s turn";
             inPlay = 1;
         });
     }
@@ -199,6 +205,7 @@ const gameControl=(() => {
     const initGame = () => {
         // TODO: Add player choice selection
         activePlayer =  player1;
+        result.textContent = "Player " + activePlayer.getSymbol() + "'s turn";
         inPlay = 1;
         addListenersBox();
         addButtonListener();
