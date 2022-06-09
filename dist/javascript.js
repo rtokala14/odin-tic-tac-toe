@@ -94,7 +94,7 @@ const gameBoard =(() => {
         
         let col = checkCol(pos);
         let row = checkRow(pos);
-        if (pos == 0 || pos == 2 || pos == 4 || pos == 6 || pos == 8) {
+        if (pos === 0 || pos === 2 || pos === 4 || pos === 6 || pos === 8) {
             diag = checkDiag(pos);
         }
 
@@ -116,6 +116,10 @@ const gameControl=(() => {
 
     let activePlayer = player1;
 
+    let movesLeft = 9;
+
+    let inPlay = 0;
+
     // Returns who the current active player is
     const getActivePlayer = () => activePlayer;
 
@@ -130,27 +134,59 @@ const gameControl=(() => {
         const result = document.getElementById('result');
 
         if (state) result.textContent = "Player " + activePlayer.getSymbol() + " has won the game!";
-        else result.textContent = "";
+        else {
+            if (!movesLeft) {
+                result.textContent = "DRAW! Reset to play again";
+            }
+            else {
+                result.textContent = "";
+            }
+        }
+
+        removeListeners();
     }
 
-    const addListeners = () => {
+    // Add listeners to the boxes
+    const addListenersBox = () => {
         boxes.forEach((box) => {
             box.addEventListener('click', () => {
-                let id = box.id.charAt(4);
-                let result = gameBoard.add(getActivePlayer().getSymbol(), id); 
-                console.log(result);
-                if (!result) switchActivePlayer();
-                else {
-                    displayWinner(1);
+                if (inPlay) {
+                    let id = parseInt(box.id.charAt(4));
+                    let result = gameBoard.add(getActivePlayer().getSymbol(), id); 
+                    //console.log(result);
+                    movesLeft = movesLeft - 1;
+                    if (!result) {
+                        if (!movesLeft) {
+                            displayWinner(0);
+                        }
+                        else {
+                            switchActivePlayer();
+                        }
+                    }
+                    else {
+                        displayWinner(1);
+                    }
                 }
             });
         });
+    }
 
+    // Add listener to reset button
+    const addButtonListener = () => {
         const reset = document.getElementById('reset-btn');
         reset.addEventListener('click', () => {
             gameBoard.clearBoard();
             activePlayer = player1;
+            movesLeft = 9;
             displayWinner(0);
+            inPlay = 1;
+        });
+    }
+
+    // Removes the listeners from boxes once a result is declared
+    const removeListeners = () => {
+        boxes.forEach((box) => {
+            inPlay = 0;
         });
     }
 
@@ -158,7 +194,9 @@ const gameControl=(() => {
     const initGame = () => {
         // TODO: Add player choice selection
         activePlayer =  player1;
-        addListeners();
+        inPlay = 1;
+        addListenersBox();
+        addButtonListener();
     }
 
     return {initGame, getActivePlayer}
