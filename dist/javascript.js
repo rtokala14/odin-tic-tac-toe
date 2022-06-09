@@ -12,9 +12,12 @@ const gameBoard =(() => {
     
     // Function to add a selection to the gameBoard
     const add = (char, pos) => {
-        gameArray[pos] = char;
-        displayBoard(pos, char);
-        return gameState(pos);
+        if (gameArray[pos] === "") {
+            gameArray[pos] = char;
+            displayBoard(pos, char);
+            return gameState(pos);
+        }
+        else return -1;
     }
 
     // Function to clear the board
@@ -154,17 +157,19 @@ const gameControl=(() => {
                     let id = parseInt(box.id.charAt(4));
                     let result = gameBoard.add(getActivePlayer().getSymbol(), id); 
                     //console.log(result);
-                    movesLeft = movesLeft - 1;
-                    if (!result) {
-                        if (!movesLeft) {
-                            displayWinner(0);
+                    if (result >= 0) {
+                        movesLeft = movesLeft - 1;
+                        if (!result) {
+                            if (!movesLeft) {
+                                displayWinner(0);
+                            }
+                            else {
+                                switchActivePlayer();
+                            }
                         }
                         else {
-                            switchActivePlayer();
+                            displayWinner(1);
                         }
-                    }
-                    else {
-                        displayWinner(1);
                     }
                 }
             });
