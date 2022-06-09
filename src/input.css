@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .box {
-    @apply border-2 border-black w-20 h-20
+    @apply w-28 h-28 bg-white text-center text-8xl p-1
 }
